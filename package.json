@@ -9,6 +9,7 @@
   "homepage": "https://github.com/JaRcomGitHub/nodejs-host-ws#readme",
   "dependencies": {
     "express": "^4.18.2",
+    "path": "^0.12.7",
     "ws": "^8.12.0"
   },
   "devDependencies": {
