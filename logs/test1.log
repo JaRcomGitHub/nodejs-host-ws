@@ -1,9 +1,0 @@
-Some content!
-{"did":204148984,"pid":2466,"mid":109,"time":1675349799,"diag":"DBG SN:DC100003A0, ver:1.2.2, id:0, T=29 V=3313 ch=4 w=13","socket":"94.179.131.20:24119"}
-{"did":204136798,"pid":6098,"mid":37,"time":1675350314,"diag":"DBG SN:DC00DCB7DB, ver:1.1.4, id:0, T=33 V=3283 ch=3 w=14","socket":"178.133.149.138:33921"}
-{"did":204136798,"pid":6284,"mid":229,"time":1675353919,"diag":"DBG SN:DC00DCB7DB, ver:1.1.4, id:0, T=34 V=3283 ch=3 w=14","socket":"178.133.28.61:55512"}
-{"did":204136798,"pid":6671,"mid":119,"time":1675361127,"diag":"DBG SN:DC00DCB7DB, ver:1.1.4, id:0, T=31 V=3282 ch=3 w=14","socket":"178.133.40.108:54029"}
-test/ntest
-test
-test
-test
