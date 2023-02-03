@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>WebSocket</title>
+  </head>
+  <script>
+    window.onload = () => {
+      let ws = connectToWebSocket();
+      
+      setInterval(() => {
+        //ws.send(JSON.stringify({ name: "John" }));
+        console.log(ws);
+        // дописать проверку текущего состояния соединения
+        // и если оборвано -> восстанавливать
+        // заново соединяться с сервером
+        if (ws.readyState === 3){
+          ws = connectToWebSocket();
+          console.log("reconnect to ws");
+        }
+      }, 10000); // каждые 10 сек проверять и заново соеденять, если что
+    };
+    function connectToWebSocket(){
+      const ws = new WebSocket('ws://localhost:8080');
+      ws.onmessage = e => {
+        console.log(e.data);
+      };
+      return ws;
+    }
+  </script>
+  <body></body>
+</html>

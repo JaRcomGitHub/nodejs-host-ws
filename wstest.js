@@ -1,10 +1,10 @@
-const WebSocketServer = new require('ws');
+const WebSocketServer = new require("ws");
 
 const wss = new WebSocketServer.Server({ port: 8080 });
 
 let clients = [];
 
-wss.on('connection', ws => {
+wss.on("connection", (ws) => {
   let id = clients.length;
   clients[id] = ws;
   console.log(`Hoвoe соединение #${id}`);
@@ -16,5 +16,9 @@ wss.on('connection', ws => {
       item.send(`К нам присоединился номер - ${id}`);
     }
   });
+
+  setInterval(() => {
+    ws.send(new Date().toISOString());
+  }, 5000);
 });
 console.log("ws server start", new Date().toISOString());
