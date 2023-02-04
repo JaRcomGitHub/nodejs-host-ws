@@ -16,7 +16,7 @@
         // дописать проверку текущего состояния соединения
         // и если оборвано -> восстанавливать
         // заново соединяться с сервером
-        if (ws.readyState === 3){
+        if (ws.readyState === 3){ // 3_CLOSED_The connection is closed or couldn't be opened.
           ws = connectToWebSocket();
           console.log("reconnect to ws");
         }
