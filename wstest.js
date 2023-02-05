@@ -1,6 +1,6 @@
 const WebSocketServer = new require("ws");
 
-const wss = new WebSocketServer.Server({ port: 8080 });
+const wss = new WebSocketServer.Server({ port: 3000 });
 
 let clients = [];
 
