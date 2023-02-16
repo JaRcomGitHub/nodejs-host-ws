@@ -93,3 +93,65 @@ server.listen(3000, () => {
 
 
 
+  const deviceSN1 = 204148983;
+  const deviceSN2 = 204148984;
+  const sensorSN1 = 'E800D9F751';
+  const sensorSN2 = 'E800D9F752';
+  const devices = {
+      [deviceSN1]: 
+      {
+          [sensorSN1]: [
+              {
+                  time:1,
+                  tem:2,
+                  pas:3,
+                  hum:4,
+                  rom:5
+              }
+          ],
+          [sensorSN2]: [
+              {
+                  time:1,
+                  tem:2,
+                  pas:3,
+                  hum:4,
+                  rom:5
+              }
+          ]
+      },
+      [deviceSN2]: 
+      {
+          [sensorSN1]: [
+              {
+                  time:1,
+                  tem:2,
+                  pas:3,
+                  hum:4,
+                  rom:5
+              }
+          ],
+          [sensorSN2]: [
+              {
+                  time:1,
+                  tem:2,
+                  pas:3,
+                  hum:4,
+                  rom:5
+              }
+          ]
+      },
+  };
+  console.log(devices);
+
+
+
+
+
+
+
+
+
+
+
+
+
