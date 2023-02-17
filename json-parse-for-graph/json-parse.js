@@ -1,7 +1,7 @@
 const fs = require("fs/promises");
 const path = require("path");
 
-const jsonfilename = '20230208-15.log';
+const jsonfilename = '20230208-16.log';
 
 const devices = {};
 
@@ -120,7 +120,7 @@ function strParseJsonDiag(strJSON) {
     const pressure = v52 ? parseFloat((v52[0] * 0.0075006).toFixed(2)) : 0; // *0.0075006 mmHg
     const humidity = v53 ? parseFloat((v53[0] / 1000).toFixed(1)) : 0;
     const resistor = v54 ? v54[0] / 1000 : 0;
-    const voltage = v55 ? v55[0] / 1000 : 0;
+    const voltage = v55 ? v55[0] * 2 / 1000 : 0;
     const data = [
         obj.did,
         sn,
