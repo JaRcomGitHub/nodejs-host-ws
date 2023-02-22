@@ -23,13 +23,12 @@ async function toLogFile() {
 }
 
 function dataGrouping(obj) {
-    const tem = [];
-    const pas = [];
-    const hum = [];
-    const rom = [];
-    const vol = [];
-
     for (var ppkSN in obj) {
+        const tem = [];
+        const pas = [];
+        const hum = [];
+        const rom = [];
+        const vol = [];
         console.log(ppkSN);
         for (var sensorSN in obj[ppkSN]) {
             const sensor = obj[ppkSN];
@@ -74,7 +73,7 @@ function fileToLineAndParse(fileData) {
     for (i in array) {
         const values = strParseJsonDiag(array[i]);
 
-        if (!(values[1].includes('E8'))) {
+        if (!(values[1].match('^E8'))) {
             continue; // пропуск для других датчиков
         }
 
