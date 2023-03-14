@@ -43,13 +43,46 @@ function dataGrouping(obj) {
             // console.log('mas',mas);
             //masToFile(ppkSN+"_"+sensorSN, JSON.stringify(mas));
 
+            let count = 0;
+            const data = [0,0,0,0,0,0];
             mas.forEach(function (item, i) {
-                const utime = item.time*1000;
-                temMini.push([utime, item.tem]);
-                pasMini.push([utime, item.pas]);
-                humMini.push([utime, item.hum]);
-                romMini.push([utime, item.rom]);
-                volMini.push([utime, item.vol]);
+                // const utime = item.time*1000;
+                // temMini.push([utime, item.tem]);
+                // pasMini.push([utime, item.pas]);
+                // humMini.push([utime, item.hum]);
+                // romMini.push([utime, item.rom]);
+                // volMini.push([utime, item.vol]);
+
+                count += 1;
+                //data[0] += item.time;
+                data[1] += item.tem;
+                data[2] += item.pas;
+                data[3] += item.hum;
+                data[4] += item.rom;
+                data[5] += item.vol;
+
+                if (count === 4){
+                    count = 0;
+                    //item.time = data[0]/4;
+                    item.tem  = (data[1].toFixed(2)/4);
+                    item.pas  = (data[2].toFixed(2)/4);
+                    item.hum  = (data[3].toFixed(1)/4);
+                    item.rom  = (data[4].toFixed(3)/4);
+                    item.vol  = (data[5].toFixed(3)/4);
+                    data[0] = 0;
+                    data[1] = 0;
+                    data[2] = 0;
+                    data[3] = 0;
+                    data[4] = 0;
+                    data[5] = 0;
+
+                    const utime = item.time*1000;
+                    temMini.push([utime, item.tem]);
+                    pasMini.push([utime, item.pas]);
+                    humMini.push([utime, item.hum]);
+                    romMini.push([utime, item.rom]);
+                    volMini.push([utime, item.vol]);
+                }
             });
             tem.push(temMini);
             pas.push(pasMini);
