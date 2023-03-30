@@ -2,6 +2,7 @@ const fs = require("fs/promises");
 const path = require("path");
 
 const jsonfilename = '20230208-__.log';
+// const jsonfilename = '2023fortest.log';
 
 const devices = {};
 
@@ -142,7 +143,7 @@ function strParseJsonDiag(strJSON) {
     const obj = JSON.parse(strJSON);
     const str = obj.diag;
     const vSN = str.match('(?<=SN:)[0-9a-fA-F]*');
-    const v51 = str.match('(?<=51=)\\d+');
+    const v51 = str.match('(?<=51=)-?\\d+');
     const v52 = str.match('(?<=52=)\\d+');
     const v53 = str.match('(?<=53=)\\d+');
     const v54 = str.match('(?<=54=)\\d+');
