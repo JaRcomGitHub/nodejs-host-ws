@@ -1,0 +1,23 @@
+#container {
+  height: 400px;
+  min-width: 310px;
+}
+
+.info {
+  display: flex;
+  gap: 20px;
+  list-style-type: none;
+}
+
+.info-1 {
+  color: #CC0000;
+}
+.info-2 {
+  color: #ffCC00;
+}
+.info-3 {
+  color: #00CC00;
+}
+.info-4 {
+  color: #0000CC;
+}
