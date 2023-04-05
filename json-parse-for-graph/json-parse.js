@@ -1,7 +1,7 @@
 const fs = require("fs/promises");
 const path = require("path");
 
-const jsonfilename = '20230208-__.log';
+const jsonfilename = '20230404-__.log';
 // const jsonfilename = '2023fortest.log';
 
 const devices = {};
