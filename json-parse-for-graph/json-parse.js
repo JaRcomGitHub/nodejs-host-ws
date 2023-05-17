@@ -9,7 +9,7 @@ const devices = {};
 toLogFile();
 
 async function toLogFile() {
-  const jsonlogFile = path.resolve(__dirname, "logs", jsonfilename);
+  const jsonlogFile = path.resolve(__dirname, "../../logs_big", jsonfilename);
 
   try {
     await fs
@@ -97,11 +97,6 @@ function dataGrouping(obj) {
     masToFile(ppkSN + "_hum", JSON.stringify(hum));
     masToFile(ppkSN + "_rom", JSON.stringify(rom));
     masToFile(ppkSN + "_vol", JSON.stringify(vol));
-    // masToFile("204148983" + "_tem", JSON.stringify(tem));
-    // masToFile("204148983" + "_pas", JSON.stringify(pas));
-    // masToFile("204148983" + "_hum", JSON.stringify(hum));
-    // masToFile("204148983" + "_rom", JSON.stringify(rom));
-    // masToFile("204148983" + "_vol", JSON.stringify(vol));
     // masToFile(JSON.stringify(tem, null, ' ')); // формат для посмотреть
     console.log("ok");
   }
