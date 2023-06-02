@@ -5,7 +5,7 @@ const mycolor = ["#CC0000", "#ffCC00", "#00CC00", "#0000CC"];
 //2023.05.16   204148983 -> 204154601
 
 //https://jarcom.top/g_tem.json
-Highcharts.getJSON("./logsjson/204148983_tem.json", function (data) {
+Highcharts.getJSON("./logsjson/204154601_tem.json", function (data) {
   // Create the chart
   //console.log(data);
   Highcharts.stockChart("containerT", {
@@ -61,7 +61,7 @@ Highcharts.getJSON("./logsjson/204148983_tem.json", function (data) {
 });
 
 //https://jarcom.top/g_hum.json
-Highcharts.getJSON("./logsjson/204148983_hum.json", function (data) {
+Highcharts.getJSON("./logsjson/204154601_hum.json", function (data) {
   // Create the chart
   Highcharts.stockChart("containerH", {
     navigation: {
@@ -115,7 +115,7 @@ Highcharts.getJSON("./logsjson/204148983_hum.json", function (data) {
   });
 });
 
-Highcharts.getJSON("./logsjson/204148983_rom.json", function (data) {
+Highcharts.getJSON("./logsjson/204154601_rom.json", function (data) {
   // Create the chart
   Highcharts.stockChart("containerR", {
     navigation: {
@@ -169,7 +169,7 @@ Highcharts.getJSON("./logsjson/204148983_rom.json", function (data) {
   });
 });
 
-Highcharts.getJSON("./logsjson/204148983_pas.json", function (data) {
+Highcharts.getJSON("./logsjson/204154601_pas.json", function (data) {
   // Create the chart
   Highcharts.stockChart("containerP", {
     navigation: {
@@ -223,7 +223,7 @@ Highcharts.getJSON("./logsjson/204148983_pas.json", function (data) {
   });
 });
 
-Highcharts.getJSON("./logsjson/204148983_vol.json", function (data) {
+Highcharts.getJSON("./logsjson/204154601_vol.json", function (data) {
   // Create the chart
   Highcharts.stockChart("containerV", {
     navigation: {
