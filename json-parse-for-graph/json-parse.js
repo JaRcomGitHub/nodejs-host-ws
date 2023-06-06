@@ -2,7 +2,6 @@ const fs = require("fs/promises");
 const path = require("path");
 
 const jsonfilename = "20230601-__.log";
-// const jsonfilename = '2023fortest.log';
 const jsonfilename1 = "20230208-20230403.log";
 const jsonfilename2 = "20230404-20230531.log";
 
@@ -16,20 +15,20 @@ async function toLogFile() {
   const jsonlogFile2 = path.resolve(__dirname, "../../logs_big", jsonfilename2);
 
   try {
+    await fs
+      .readFile(jsonlogFile)
+      .then((data) => fileToLineAndParse(data))
+      .catch((err) => console.log(err.message));
+
     // await fs
-    //   .readFile(jsonlogFile)
+    //   .readFile(jsonlogFile1)
     //   .then((data) => fileToLineAndParse(data))
     //   .catch((err) => console.log(err.message));
 
-    await fs
-      .readFile(jsonlogFile1)
-      .then((data) => fileToLineAndParse(data))
-      .catch((err) => console.log(err.message));
-
-    await fs
-      .readFile(jsonlogFile2)
-      .then((data) => fileToLineAndParse(data))
-      .catch((err) => console.log(err.message));
+    // await fs
+    //   .readFile(jsonlogFile2)
+    //   .then((data) => fileToLineAndParse(data))
+    //   .catch((err) => console.log(err.message));
 
     dataGrouping(devices);
   } catch (err) {
