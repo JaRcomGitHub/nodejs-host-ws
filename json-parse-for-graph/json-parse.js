@@ -1,10 +1,12 @@
 const fs = require("fs/promises");
 const path = require("path");
 
+// const jsonfilename = "2023fortest.log";
 const jsonfilename = "20230601-__.log";
 const jsonfilename1 = "20230208-20230403.log";
 const jsonfilename2 = "20230404-20230531.log";
 
+const IAQ_ON = 1;
 const devices = {};
 
 toLogFile();
@@ -43,6 +45,7 @@ function dataGrouping(obj) {
     const hum = [];
     const rom = [];
     const vol = [];
+    const iaq = [];
     console.log(ppkSN);
     for (var sensorSN in obj[ppkSN]) {
       const sensor = obj[ppkSN];
@@ -52,13 +55,14 @@ function dataGrouping(obj) {
       const humMini = [];
       const romMini = [];
       const volMini = [];
+      const iaqMini = [];
 
       console.log("\t", sensorSN);
       // console.log('mas',mas);
       //masToFile(ppkSN+"_"+sensorSN, JSON.stringify(mas));
 
       let count = 0;
-      const data = [0, 0, 0, 0, 0, 0];
+      const data = [0, 0, 0, 0, 0, 0, 0];
       mas.forEach(function (item, i) {
         // const utime = item.time*1000;
         // temMini.push([utime, item.tem]);
@@ -74,6 +78,7 @@ function dataGrouping(obj) {
         data[3] += item.hum;
         data[4] += item.rom;
         data[5] += item.vol;
+        data[6] += item.iaq;
 
         if (count === 4) {
           count = 0;
@@ -83,12 +88,14 @@ function dataGrouping(obj) {
           item.hum = data[3].toFixed(1) / 4;
           item.rom = data[4].toFixed(3) / 4;
           item.vol = data[5].toFixed(3) / 4;
+          item.iaq = data[6] / 4;
           data[0] = 0;
           data[1] = 0;
           data[2] = 0;
           data[3] = 0;
           data[4] = 0;
           data[5] = 0;
+          data[6] = 0;
 
           const utime = item.time * 1000;
           temMini.push([utime, item.tem]);
@@ -96,6 +103,9 @@ function dataGrouping(obj) {
           humMini.push([utime, item.hum]);
           romMini.push([utime, item.rom]);
           volMini.push([utime, item.vol]);
+          if (IAQ_ON === 1) {
+            iaqMini.push([utime, item.iaq]);
+          }
         }
       });
       tem.push(temMini);
@@ -103,6 +113,9 @@ function dataGrouping(obj) {
       hum.push(humMini);
       rom.push(romMini);
       vol.push(volMini);
+      if (IAQ_ON === 1) {
+        iaq.push(iaqMini);
+      }
     }
 
     masToFile(ppkSN + "_tem", JSON.stringify(tem));
@@ -110,6 +123,9 @@ function dataGrouping(obj) {
     masToFile(ppkSN + "_hum", JSON.stringify(hum));
     masToFile(ppkSN + "_rom", JSON.stringify(rom));
     masToFile(ppkSN + "_vol", JSON.stringify(vol));
+    if (IAQ_ON === 1) {
+      masToFile(ppkSN + "_iaq", JSON.stringify(iaq));
+    }
     // masToFile(JSON.stringify(tem, null, ' ')); // формат для посмотреть
     console.log("ok");
   }
@@ -133,6 +149,7 @@ function fileToLineAndParse(fileData) {
       hum: values[5],
       rom: values[6],
       vol: values[7],
+      iaq: values[8],
     };
     addDataToSensor(deviceSN, sensorSN, sensorData);
   }
@@ -156,17 +173,24 @@ function strParseJsonDiag(strJSON) {
   const obj = JSON.parse(strJSON);
   const str = obj.diag;
   const vSN = str.match("(?<=SN:)[0-9a-fA-F]*");
+  const ver = str.match("(?<=ver:)[0-9.]*");
   const v51 = str.match("(?<=51=)-?\\d+");
   const v52 = str.match("(?<=52=)\\d+");
   const v53 = str.match("(?<=53=)\\d+");
   const v54 = str.match("(?<=54=)\\d+");
   const v55 = str.match("(?<=55=)\\d+");
+  const v57 = str.match("(?<=57=)\\d+"); // IAQ
   const sn = vSN ? vSN[0] : "";
   const temperature = v51 ? v51[0] / 100 : 0;
   const pressure = v52 ? parseFloat((v52[0] * 0.0075006).toFixed(2)) : 0; // *0.0075006 mmHg
   const humidity = v53 ? parseFloat((v53[0] / 1000).toFixed(1)) : 0;
   const resistor = v54 ? v54[0] / 1000 : 0;
-  const voltage = v55 ? (v55[0] * 2) / 1000 : 0;
+  var mul = 2;
+  if (ver == "0.2.7") {
+    mul = 1;
+  }
+  const voltage = v55 ? (v55[0] * mul) / 1000 : 0;
+  const iaq = v57 ? parseInt(v57[0]) : 0;
   const data = [
     obj.did,
     sn,
@@ -176,6 +200,7 @@ function strParseJsonDiag(strJSON) {
     humidity,
     resistor,
     voltage,
+    iaq,
   ];
   return data;
 }
