@@ -19,25 +19,25 @@ async function toLogFile() {
   const jsonlogFile3 = path.resolve(__dirname, "../../logs_big", jsonfilename3);
 
   try {
+    await fs
+      .readFile(jsonlogFile)
+      .then((data) => fileToLineAndParse(data))
+      .catch((err) => console.log(err.message));
+
     // await fs
-    //   .readFile(jsonlogFile)
+    //   .readFile(jsonlogFile1)
     //   .then((data) => fileToLineAndParse(data))
     //   .catch((err) => console.log(err.message));
 
-    await fs
-      .readFile(jsonlogFile1)
-      .then((data) => fileToLineAndParse(data))
-      .catch((err) => console.log(err.message));
+    // await fs
+    //   .readFile(jsonlogFile2)
+    //   .then((data) => fileToLineAndParse(data))
+    //   .catch((err) => console.log(err.message));
 
-    await fs
-      .readFile(jsonlogFile2)
-      .then((data) => fileToLineAndParse(data))
-      .catch((err) => console.log(err.message));
-
-    await fs
-      .readFile(jsonlogFile3)
-      .then((data) => fileToLineAndParse(data))
-      .catch((err) => console.log(err.message));
+    // await fs
+    //   .readFile(jsonlogFile3)
+    //   .then((data) => fileToLineAndParse(data))
+    //   .catch((err) => console.log(err.message));
 
     dataGrouping(devices);
   } catch (err) {
@@ -146,6 +146,16 @@ function fileToLineAndParse(fileData) {
     if (!values[1].match("^E8")) {
       continue; // пропуск для других датчиков
     }
+
+    // if (values[1].match("^E800A93464")) {
+    //   continue; // пропуск для двух датчиков
+    // }
+    // if (values[1].match("^E800A93468")) {
+    //   continue; // пропуск для двух датчиков
+    // }
+    // if (values[0] == 204154601) {
+    //   values[0] = 204148983;
+    // }
 
     const deviceSN = values[0];
     const sensorSN = values[1];
