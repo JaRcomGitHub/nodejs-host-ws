@@ -2,7 +2,9 @@ const fs = require("fs/promises");
 const path = require("path");
 
 // const jsonfilename = "2023fortest.log";
-const jsonfilename = "204147395.log";
+// const jsonfilename = "204147395.log";
+// const jsonfilename = "204147700_F9001998D7.txt";
+const jsonfilename = "204144588_longtest.log";
 
 const devices = {};
 
@@ -52,10 +54,7 @@ function dataGrouping(obj) {
     const ir_dustStatic = [];
     const temperature = [];
     const COppm = [];
-    var lastcnt = 0;
-    //lastcnt = obj[ppkSN].cnt[0];
-    // console.log("\t", obj[ppkSN].cnt);
-    // console.log("\t", obj[ppkSN].cnt[0]);
+
     console.log(ppkSN);
     for (var sensorSN in obj[ppkSN]) {
       const sensor = obj[ppkSN];
@@ -67,6 +66,7 @@ function dataGrouping(obj) {
       const ir_dustStaticMini = [];
       const temperatureMini = [];
       const COppmMini = [];
+      var lastcnt = 0;
 
       console.log("\t", sensorSN);
       // console.log('mas',mas);
@@ -74,6 +74,7 @@ function dataGrouping(obj) {
 
       mas.forEach(function (item, i) {
         const utime = item.time * 1000;
+        if (lastcnt == 0) lastcnt = item.cnt - 1;
         const deeltacnt = item.cnt - lastcnt - 1;
         lastcnt = item.cnt;
         cntMini.push([utime, deeltacnt]);
@@ -173,7 +174,10 @@ function strParseJsonDiag(strJSON) {
   if (blue_delta & 0x80000000) {
     blue_delta = (0xffffffff - blue_delta + 1) * -1;
   }
-  const ir_delta = v62 ? v62[0] * 1 : 0;
+  var ir_delta = v62 ? v62[0] * 1 : 0;
+  if (ir_delta & 0x80000000) {
+    ir_delta = (0xffffffff - ir_delta + 1) * -1;
+  }
   const ir_fon = v63 ? v63[0] * 1 : 0;
   const ir_dustStatic = v64 ? v64[0] * 1 : 0;
   const temperature = v65 ? v65[0] / 10 : 0;
