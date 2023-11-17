@@ -4,7 +4,7 @@ const path = require("path");
 // const jsonfilename = "2023fortest.log";
 // const jsonfilename = "204147395.log";
 // const jsonfilename = "204147700_F9001998D7.txt";
-const jsonfilename = "204144588_longtest.log";
+const jsonfilename = "204144588_longtest3.log";
 
 const devices = {};
 
@@ -181,7 +181,10 @@ function strParseJsonDiag(strJSON) {
   const ir_fon = v63 ? v63[0] * 1 : 0;
   const ir_dustStatic = v64 ? v64[0] * 1 : 0;
   const temperature = v65 ? v65[0] / 10 : 0;
-  const COppm = v66 ? v66[0] * 1 : 0;
+  var COppm = v66 ? v66[0] * 1 : 0;
+  if (COppm & 0x80000000) {
+    COppm = (0xffffffff - COppm + 1) * -1;
+  }
   const data = [
     obj.did,
     sn,
