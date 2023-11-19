@@ -150,6 +150,8 @@ function addDataToSensor(device, sensor, data) {
   }
 }
 
+var timefp = 0;
+var timecntfp = 0;
 function strParseJsonDiag(strJSON) {
   const obj = JSON.parse(strJSON);
   const str = obj.diag;
@@ -185,10 +187,22 @@ function strParseJsonDiag(strJSON) {
   if (COppm & 0x80000000) {
     COppm = (0xffffffff - COppm + 1) * -1;
   }
+  var time = obj.time;
+  time += 2 * 60 * 60; // +2часа
+  if (timefp == time) {
+    timecntfp++;
+    time += 2 * timecntfp;
+  } else {
+    timefp = time;
+    if (timecntfp > 1) {
+      time += 5;
+    }
+    timecntfp = 0;
+  }
   const data = [
     obj.did,
     sn,
-    obj.time,
+    time,
     cnt,
     blue_delta,
     ir_delta,
