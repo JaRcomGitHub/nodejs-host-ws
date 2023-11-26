@@ -1,9 +1,9 @@
 const WebSocket = require("ws");
 const fs = require("fs/promises");
 const path = require("path");
-// const dotenv = require("dotenv");
-// dotenv.config();
-// const { WS_URL_PORT } = process.env;
+const dotenv = require("dotenv");
+dotenv.config();
+const { WS_URL_PORT } = process.env;
 
 function main() {
   let ws = connectToWebSocket();
@@ -22,7 +22,7 @@ main();
 
 let status_ws = null;
 function connectToWebSocket() {
-  let ws = new WebSocket("ws://localhost:3000");
+  let ws = new WebSocket(WS_URL_PORT);
 
   ws.onerror = function (error) {
     if (status_ws !== false) {
