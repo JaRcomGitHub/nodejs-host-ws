@@ -2,11 +2,12 @@ const fs = require("fs/promises");
 const path = require("path");
 
 // const jsonfilename = "2023fortest.log";
-const jsonfilename = "20231001-__.log";
+const jsonfilename = "20231201-__.log";
 const jsonfilename1 = "20230208-20230403.log";
 const jsonfilename2 = "20230404-20230531.log";
 const jsonfilename3 = "20230601-20230731.log";
 const jsonfilename4 = "20230801-20230930.log";
+const jsonfilename5 = "20231001-20231130.log";
 
 const IAQ_ON = 1;
 const devices = {};
@@ -19,6 +20,7 @@ async function toLogFile() {
   // const jsonlogFile2 = path.resolve(__dirname, "../../logs_big", jsonfilename2);
   // const jsonlogFile3 = path.resolve(__dirname, "../../logs_big", jsonfilename3);
   // const jsonlogFile4 = path.resolve(__dirname, "../../logs_big", jsonfilename4);
+  // const jsonlogFile5 = path.resolve(__dirname, "../../logs_big", jsonfilename5);
 
   try {
     await fs
@@ -43,6 +45,11 @@ async function toLogFile() {
 
     // await fs
     //   .readFile(jsonlogFile4)
+    //   .then((data) => fileToLineAndParse(data))
+    //   .catch((err) => console.log(err.message));
+
+    // await fs
+    //   .readFile(jsonlogFile5)
     //   .then((data) => fileToLineAndParse(data))
     //   .catch((err) => console.log(err.message));
 
