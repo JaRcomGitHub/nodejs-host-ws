@@ -5,7 +5,8 @@ const path = require("path");
 // const jsonfilename = "204147395.log";
 // const jsonfilename = "204147700_F9001998D7.txt";
 const jsonfilename = "204144588_longtest3.log";
-const jsonfilename1 = "204148983_fire_home108.log";
+// const jsonfilename1 = "204148983_fire_home108.log";
+const jsonfilename1 = "204148980.log";
 
 const devices = {};
 
