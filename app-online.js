@@ -15,6 +15,7 @@ function main() {
     if (ws?.readyState === 3) {
       ws = connectToWebSocket(); // try reconnect to ws
     }
+    dataWorking(devices);
   }, 10000); // every 10 sec check connect ws and try reconnect to ws
 }
 
@@ -27,16 +28,16 @@ function connectToWebSocket() {
   ws.onerror = function (error) {
     if (status_ws !== false) {
       status_ws = false;
-      console.log("ws.onerror", new Date().toISOString());
-      // consoleToLogFile("ws onerror " + new Date().toISOString());
+      // console.log("ws.onerror", new Date().toISOString());
+      consoleToLogFile("ws onerror " + new Date().toISOString());
     }
   };
 
   ws.onopen = function (e) {
     if (status_ws !== true) {
       status_ws = true;
-      console.log("ws.onopen", new Date().toISOString());
-      // consoleToLogFile("ws onopen " + new Date().toISOString());
+      // console.log("ws.onopen", new Date().toISOString());
+      consoleToLogFile("ws onopen " + new Date().toISOString());
     }
   };
 
@@ -44,8 +45,8 @@ function connectToWebSocket() {
     // dataToLogFile(e.data);
     // console.log("ws: " + e.data);
     const values = strParseJson(e.data);
-    //console.log("ws2: " + values);
-    console.log(values);
+    // console.log(values);
+    addDataToDevice(values);
   };
 
   return ws;
@@ -96,4 +97,58 @@ async function consoleToLogFile(content) {
   } catch (err) {
     console.log(err);
   }
+}
+
+function addDataToDevice(data) {
+  const { ppk, time, sn, ver, id, msg } = data;
+
+  const date = new Date(time * 1000);
+  // console.log(date.toISOString());
+  // Hours part from the timestamp
+  var hours = date.getHours();
+
+  // Minutes part from the timestamp
+  var minutes = "0" + date.getMinutes();
+
+  // Seconds part from the timestamp
+  var seconds = "0" + date.getSeconds();
+
+  // Will display time in 10:30:23 format
+  var formattedTime =
+    hours + ":" + minutes.substr(-2) + ":" + seconds.substr(-2);
+
+  console.log(formattedTime, ppk, sn, msg);
+
+  // const buf1 = Buffer.alloc(1000);
+
+  if (!devices.hasOwnProperty(ppk)) {
+    devices[ppk] = { [sn]: { ver, id, msgs: [time, msg] } };
+  } else {
+    const d = devices[ppk];
+    if (!d.hasOwnProperty(sn)) {
+      devices[ppk] = { [sn]: { ver, id, msgs: [time, msg] } };
+    } else {
+      d[sn].ver = ver;
+      d[sn].id = id;
+      d[sn].msgs.push(time, msg);
+      const size = d[sn].msgs.length;
+      const maxsize = 10 * 2; // сообщение состоит из времени и строки
+      if (size > maxsize) {
+        for (let index = 0; index < size - maxsize; index++) {
+          d[sn].msgs.shift();
+        }
+      }
+    }
+    devices[ppk] = { ...devices[ppk], ...d };
+  }
+}
+
+function dataWorking(obj) {
+  console.log("dataWorking");
+
+  //dataToLogFile(JSON.stringify(obj, null, " ")); // для строки
+  // for (var ppkSN in obj) {
+  console.log(obj);
+
+  // }
 }
