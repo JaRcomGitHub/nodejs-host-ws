@@ -102,31 +102,23 @@ async function consoleToLogFile(content) {
 function addDataToDevice(data) {
   const { ppk, time, sn, ver, id, msg } = data;
 
+  // кусок временно для отладки - отображение времени сообщения
   const date = new Date(time * 1000);
   // console.log(date.toISOString());
-  // Hours part from the timestamp
-  var hours = date.getHours();
-
-  // Minutes part from the timestamp
-  var minutes = "0" + date.getMinutes();
-
-  // Seconds part from the timestamp
-  var seconds = "0" + date.getSeconds();
-
+  var hours = date.getHours(); // Hours part from the timestamp
+  var minutes = "0" + date.getMinutes(); // Minutes part from the timestamp
+  var seconds = "0" + date.getSeconds(); // Seconds part from the timestamp
   // Will display time in 10:30:23 format
   var formattedTime =
     hours + ":" + minutes.substr(-2) + ":" + seconds.substr(-2);
-
   console.log(formattedTime, ppk, sn, msg);
 
-  // const buf1 = Buffer.alloc(1000);
-
   if (!devices.hasOwnProperty(ppk)) {
-    devices[ppk] = { [sn]: { ver, id, msgs: [time, msg] } };
+    devices[ppk] = { [sn]: { ver, id, msgs: [time, msg], msgl: 1 } };
   } else {
     const d = devices[ppk];
     if (!d.hasOwnProperty(sn)) {
-      devices[ppk] = { [sn]: { ver, id, msgs: [time, msg] } };
+      devices[ppk] = { [sn]: { ver, id, msgs: [time, msg], msgl: 1 } };
     } else {
       d[sn].ver = ver;
       d[sn].id = id;
@@ -138,6 +130,7 @@ function addDataToDevice(data) {
           d[sn].msgs.shift();
         }
       }
+      d[sn].msgl = d[sn].msgs.length / 2; // текущее количество сообщений
     }
     devices[ppk] = { ...devices[ppk], ...d };
   }
