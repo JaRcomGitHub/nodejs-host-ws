@@ -79,11 +79,21 @@ function getCurrentDate() {
     .replace(/\T.+/, "");
 }
 
-async function dataToLogFile(content) {
+async function dataToLogFileAdd(content) {
   const filename = getCurrentDate() + ".log";
   const logFile = path.resolve(__dirname, "logs", filename);
   try {
     await fs.appendFile(logFile, content + "\n");
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+async function dataToLogFileUpdate(content) {
+  const filename = getCurrentDate() + ".log";
+  const logFile = path.resolve(__dirname, "logs", filename);
+  try {
+    await fs.writeFile(logFile, content + "\n");
   } catch (err) {
     console.log(err);
   }
@@ -114,11 +124,11 @@ function addDataToDevice(data) {
   console.log(formattedTime, ppk, sn, msg);
 
   if (!devices.hasOwnProperty(ppk)) {
-    devices[ppk] = { [sn]: { ver, id, msgs: [time, msg], msgl: 1 } };
+    devices[ppk] = { [sn]: { ver, id, msgs: [time, msg] } };
   } else {
     const d = devices[ppk];
     if (!d.hasOwnProperty(sn)) {
-      devices[ppk] = { [sn]: { ver, id, msgs: [time, msg], msgl: 1 } };
+      devices[ppk] = { [sn]: { ver, id, msgs: [time, msg] } };
     } else {
       d[sn].ver = ver;
       d[sn].id = id;
@@ -130,7 +140,7 @@ function addDataToDevice(data) {
           d[sn].msgs.shift();
         }
       }
-      d[sn].msgl = d[sn].msgs.length / 2; // текущее количество сообщений
+      //d[sn].msgl = d[sn].msgs.length / 2; // текущее количество сообщений
     }
     devices[ppk] = { ...devices[ppk], ...d };
   }
@@ -139,7 +149,8 @@ function addDataToDevice(data) {
 function dataWorking(obj) {
   console.log("dataWorking");
 
-  //dataToLogFile(JSON.stringify(obj, null, " ")); // для строки
+  // dataToLogFileAdd(JSON.stringify(obj, null, " "));
+  dataToLogFileUpdate(JSON.stringify(obj, null, " "));
   // for (var ppkSN in obj) {
   console.log(obj);
 
