@@ -4,9 +4,9 @@ const path = require("path");
 // const jsonfilename = "2023fortest.log";
 // const jsonfilename = "204147395.log";
 // const jsonfilename = "204147700_F9001998D7.txt";
-const jsonfilename = "204144588_longtest3.log";
+const jsonfilename = "204144588_longtest4.log";
 // const jsonfilename1 = "204148983_fire_home108.log";
-const jsonfilename1 = "204148980.log";
+// const jsonfilename1 = "204148980.log";
 
 const devices = {};
 
@@ -14,7 +14,7 @@ toLogFile();
 
 async function toLogFile() {
   const jsonlogFile = path.resolve(__dirname, "../../logs_big", jsonfilename);
-  const jsonlogFile1 = path.resolve(__dirname, "../../logs_big", jsonfilename1);
+  // const jsonlogFile1 = path.resolve(__dirname, "../../logs_big", jsonfilename1);
 
   try {
     await fs
@@ -22,10 +22,10 @@ async function toLogFile() {
       .then((data) => fileToLineAndParse(data))
       .catch((err) => console.log(err.message));
 
-    await fs
-      .readFile(jsonlogFile1)
-      .then((data) => fileToLineAndParse(data))
-      .catch((err) => console.log(err.message));
+    // await fs
+    //   .readFile(jsonlogFile1)
+    //   .then((data) => fileToLineAndParse(data))
+    //   .catch((err) => console.log(err.message));
 
     // await fs
     //   .readFile(jsonlogFile2)
