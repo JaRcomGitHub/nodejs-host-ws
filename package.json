@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
+    "start-ws-client": "node ws-client-logs-ppk.js",
     "start": "node app.js",
     "start:dev": "nodemon app.js"
   },
