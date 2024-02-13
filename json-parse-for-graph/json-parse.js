@@ -2,13 +2,13 @@ const fs = require("fs/promises");
 const path = require("path");
 
 // const jsonfilename = "2023fortest.log";
-const jsonfilename = "20231201-__.log";
+const jsonfilename = "20240213-__.log";
 const jsonfilename1 = "20230208-20230403.log";
 const jsonfilename2 = "20230404-20230531.log";
 const jsonfilename3 = "20230601-20230731.log";
 const jsonfilename4 = "20230801-20230930.log";
 const jsonfilename5 = "20231001-20231130.log";
-const jsonfilename6 = "20231201-__.log";
+const jsonfilename6 = "20231201-20240212.log";
 
 const IAQ_ON = 1;
 const devices = {};
@@ -16,49 +16,49 @@ const devices = {};
 toLogFile();
 
 async function toLogFile() {
-  // const jsonlogFile = path.resolve(__dirname, "../../logs_big", jsonfilename);
-  const jsonlogFile1 = path.resolve(__dirname, "../../logs_big", jsonfilename1);
-  const jsonlogFile2 = path.resolve(__dirname, "../../logs_big", jsonfilename2);
-  const jsonlogFile3 = path.resolve(__dirname, "../../logs_big", jsonfilename3);
-  const jsonlogFile4 = path.resolve(__dirname, "../../logs_big", jsonfilename4);
-  const jsonlogFile5 = path.resolve(__dirname, "../../logs_big", jsonfilename5);
-  const jsonlogFile6 = path.resolve(__dirname, "../../logs_big", jsonfilename6);
+  const jsonlogFile = path.resolve(__dirname, "../../logs_big", jsonfilename);
+  // const jsonlogFile1 = path.resolve(__dirname, "../../logs_big", jsonfilename1);
+  // const jsonlogFile2 = path.resolve(__dirname, "../../logs_big", jsonfilename2);
+  // const jsonlogFile3 = path.resolve(__dirname, "../../logs_big", jsonfilename3);
+  // const jsonlogFile4 = path.resolve(__dirname, "../../logs_big", jsonfilename4);
+  // const jsonlogFile5 = path.resolve(__dirname, "../../logs_big", jsonfilename5);
+  // const jsonlogFile6 = path.resolve(__dirname, "../../logs_big", jsonfilename6);
 
   try {
+    await fs
+      .readFile(jsonlogFile)
+      .then((data) => fileToLineAndParse(data))
+      .catch((err) => console.log(err.message));
+
     // await fs
-    //   .readFile(jsonlogFile)
+    //   .readFile(jsonlogFile1)
     //   .then((data) => fileToLineAndParse(data))
     //   .catch((err) => console.log(err.message));
 
-    await fs
-      .readFile(jsonlogFile1)
-      .then((data) => fileToLineAndParse(data))
-      .catch((err) => console.log(err.message));
+    // await fs
+    //   .readFile(jsonlogFile2)
+    //   .then((data) => fileToLineAndParse(data))
+    //   .catch((err) => console.log(err.message));
 
-    await fs
-      .readFile(jsonlogFile2)
-      .then((data) => fileToLineAndParse(data))
-      .catch((err) => console.log(err.message));
+    // await fs
+    //   .readFile(jsonlogFile3)
+    //   .then((data) => fileToLineAndParse(data))
+    //   .catch((err) => console.log(err.message));
 
-    await fs
-      .readFile(jsonlogFile3)
-      .then((data) => fileToLineAndParse(data))
-      .catch((err) => console.log(err.message));
+    // await fs
+    //   .readFile(jsonlogFile4)
+    //   .then((data) => fileToLineAndParse(data))
+    //   .catch((err) => console.log(err.message));
 
-    await fs
-      .readFile(jsonlogFile4)
-      .then((data) => fileToLineAndParse(data))
-      .catch((err) => console.log(err.message));
+    // await fs
+    //   .readFile(jsonlogFile5)
+    //   .then((data) => fileToLineAndParse(data))
+    //   .catch((err) => console.log(err.message));
 
-    await fs
-      .readFile(jsonlogFile5)
-      .then((data) => fileToLineAndParse(data))
-      .catch((err) => console.log(err.message));
-
-    await fs
-      .readFile(jsonlogFile6)
-      .then((data) => fileToLineAndParse(data))
-      .catch((err) => console.log(err.message));
+    // await fs
+    //   .readFile(jsonlogFile6)
+    //   .then((data) => fileToLineAndParse(data))
+    //   .catch((err) => console.log(err.message));
 
     dataGrouping(devices);
   } catch (err) {
@@ -172,15 +172,15 @@ function fileToLineAndParse(fileData) {
     //   continue;
     // }
 
-    if (values[1].match("^E800A93464")) {
-      continue; // пропуск для двух датчиков
-    }
-    if (values[1].match("^E800A93468")) {
-      continue; // пропуск для двух датчиков
-    }
-    if (values[0] == 204148983) {
-      values[0] = 204154601;
-    }
+    // if (values[1].match("^E800A93464")) {
+    //   continue; // пропуск для двух датчиков
+    // }
+    // if (values[1].match("^E800A93468")) {
+    //   continue; // пропуск для двух датчиков
+    // }
+    // if (values[0] == 204148983) {
+    //   values[0] = 204154601;
+    // }
 
     const deviceSN = values[0];
     const sensorSN = values[1];
