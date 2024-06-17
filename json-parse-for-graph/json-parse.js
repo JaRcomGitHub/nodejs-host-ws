@@ -2,7 +2,8 @@ const fs = require("fs/promises");
 const path = require("path");
 
 // const jsonfilename = "2023fortest.log";
-const jsonfilename = "20240213-__.log";
+const jsonfilename = "204148983_X-Climate_1.log";
+// const jsonfilename = "20240213-__.log";
 const jsonfilename1 = "20230208-20230403.log";
 const jsonfilename2 = "20230404-20230531.log";
 const jsonfilename3 = "20230601-20230731.log";
@@ -73,7 +74,7 @@ function dataGrouping(obj) {
     const hum = [];
     const rom = [];
     const vol = [];
-    // const iaq = [];
+    const iaq = [];
     console.log(ppkSN);
     for (var sensorSN in obj[ppkSN]) {
       const sensor = obj[ppkSN];
@@ -83,7 +84,7 @@ function dataGrouping(obj) {
       const humMini = [];
       const romMini = [];
       const volMini = [];
-      // const iaqMini = [];
+      const iaqMini = [];
 
       console.log("\t", sensorSN);
       // console.log('mas',mas);
@@ -106,7 +107,7 @@ function dataGrouping(obj) {
         data[3] += item.hum;
         data[4] += item.rom;
         data[5] += item.vol;
-        // data[6] += item.iaq;
+        data[6] += item.iaq;
 
         if (count === 4) {
           count = 0;
@@ -116,14 +117,14 @@ function dataGrouping(obj) {
           item.hum = data[3].toFixed(1) / 4;
           item.rom = data[4].toFixed(3) / 4;
           item.vol = data[5].toFixed(3) / 4;
-          // item.iaq = data[6] / 4;
+          item.iaq = data[6] / 4;
           data[0] = 0;
           data[1] = 0;
           data[2] = 0;
           data[3] = 0;
           data[4] = 0;
           data[5] = 0;
-          // data[6] = 0;
+          data[6] = 0;
 
           const utime = item.time * 1000;
           temMini.push([utime, item.tem]);
@@ -132,7 +133,7 @@ function dataGrouping(obj) {
           romMini.push([utime, item.rom]);
           volMini.push([utime, item.vol]);
           // if (IAQ_ON === 1) {
-          //   iaqMini.push([utime, item.iaq]);
+             iaqMini.push([utime, item.iaq]);
           // }
         }
       });
@@ -142,7 +143,7 @@ function dataGrouping(obj) {
       rom.push(romMini);
       vol.push(volMini);
       // if (IAQ_ON === 1) {
-      //   iaq.push(iaqMini);
+         iaq.push(iaqMini);
       // }
     }
 
@@ -152,7 +153,7 @@ function dataGrouping(obj) {
     masToFile(ppkSN + "_rom", JSON.stringify(rom));
     masToFile(ppkSN + "_vol", JSON.stringify(vol));
     // if (IAQ_ON === 1) {
-    //   masToFile(ppkSN + "_iaq", JSON.stringify(iaq));
+       masToFile(ppkSN + "_iaq", JSON.stringify(iaq));
     // }
     // masToFile(JSON.stringify(tem, null, ' ')); // формат для посмотреть
     console.log("ok");
@@ -191,7 +192,7 @@ function fileToLineAndParse(fileData) {
       hum: values[5],
       rom: values[6],
       vol: values[7],
-      // iaq: values[8],
+      iaq: values[8],
     };
     addDataToSensor(deviceSN, sensorSN, sensorData);
   }
@@ -228,11 +229,12 @@ function strParseJsonDiag(strJSON) {
   const humidity = v53 ? parseFloat((v53[0] / 1000).toFixed(1)) : 0;
   const resistor = v54 ? v54[0] / 1000 : 0;
   var mul = 2;
-  if (ver == "0.2.7") {
+  if ((ver == "0.2.7") || (ver == "1.2.0"))
+  {
     mul = 1;
   }
   const voltage = v55 ? (v55[0] * mul) / 1000 : 0;
-  // const iaq = v57 ? parseInt(v57[0]) : 0;
+  const iaq = v57 ? parseInt(v57[0]) : 0;
   const data = [
     obj.did,
     sn,
@@ -242,7 +244,7 @@ function strParseJsonDiag(strJSON) {
     humidity,
     resistor,
     voltage,
-    // iaq,
+    iaq,
   ];
   return data;
 }
