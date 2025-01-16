@@ -5,7 +5,8 @@
   "scripts": {
     "start-ws-client": "node ws-client-logs-ppk.js",
     "start": "node app.js",
-    "start:dev": "nodemon app.js"
+    "start:dev": "nodemon app.js",
+    "pm2": "pm2 start ws-client-logs-ppk.js"
   },
   "homepage": "https://github.com/JaRcomGitHub/nodejs-host-ws#readme",
   "dependencies": {
