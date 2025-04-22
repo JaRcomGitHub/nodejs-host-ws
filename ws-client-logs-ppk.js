@@ -27,10 +27,10 @@ function connectToWebSocket(ws_port) {
   ws.on('error', wsError);
 
   setInterval(() => {
+    //console.log("dataWorking " + new Date().toISOString());
     //console.log(devices);
     dataWorking(devices);
-    //console.log("dataWorking " + new Date().toISOString());
-  }, 10000); // every 10 sec check connect ws and try reconnect to ws
+  }, 10000); // every 10 sec
 
   return ws;
 }
