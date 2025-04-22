@@ -13,58 +13,29 @@ const dotenv = require("dotenv");
 dotenv.config();
 const { WS_URL_PORT } = process.env;
 
-//wsClientListen(WS_URL_PORT); // запуск приложения
-//e. если запускать файл сам по себе
-
-//s. если в связке
-// module.exports = { wsClientListen, devices };
-//e. если в связке
-
 //------------------------------------------------------
 
-function wsClientListen(ws_port) {
-  let ws = connectToWebSocket(ws_port);
-
-  setInterval(() => {
-    // check connect ws if(3=CLOSED) The connection is closed or couldn't be opened.
-    if (ws?.readyState === 3) {
-      // try reconnect to ws
-      ws = connectToWebSocket();
-    }
-    // console.log(devices);
-    dataWorking(devices);
-  }, 10000); // every 10 sec check connect ws and try reconnect to ws
-}
-
-let status_ws = null;
 function connectToWebSocket(ws_port) {
   let ws = new ReconnectingWebSocket(ws_port);
 
- /* ws.onerror = function (error) {
-    if (status_ws !== false) {
-      status_ws = false;
-      // console.log("ws.onerror", new Date().toISOString());
-      consoleLogToFile("ws onerror " + new Date().toISOString());
-    }
-  };
- */
-  ws.onopen = function (e) {
-    if (status_ws !== true) {
-      status_ws = true;
-      // console.log("ws.onopen", new Date().toISOString());
-      consoleLogToFile("ws onopen " + new Date().toISOString());
-    }
-  };
-
-  ws.onmessage = (e) => {
-    dataAddToLogFile(e.data);
-    // console.log("ws: " + e.data);
-    const values = strParseJson(e.data);
-    // console.log(values);
-    addDataToDevice(values);
-  };
+  ws.on('open', wsOpen)
+  
+  ws.on('message', wsMessage);
 
   return ws;
+}
+
+function wsOpen(){
+  //console.log("ws.onopen", new Date().toISOString());
+  consoleLogToFile("ws onopen " + new Date().toISOString());
+}
+
+function wsMessage(e){
+    dataAddToLogFile(e.data);
+    //console.log("ws: " + e.data);
+    const values = strParseJson(e.data);
+    //console.log(values);
+    addDataToDevice(values);
 }
 
 async function dataAddToLogFile(content) {
@@ -191,10 +162,12 @@ class ReconnectingWebSocket {
     this.ws.addEventListener('open', (e) => {
       this._flushQueue();
       this._emit('open', e);
+      //console.log("ws open", new Date().toISOString());
     });
 
     this.ws.addEventListener('message', (e) => {
       this._emit('message', e);
+      //console.log("message", e.data);
     });
 
     this.ws.addEventListener('close', (e) => {
@@ -255,3 +228,5 @@ class ReconnectingWebSocket {
 }
 
 const connection = connectToWebSocket(WS_URL_PORT);
+
+// console.log("start");
