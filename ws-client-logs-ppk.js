@@ -13,7 +13,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 const { WS_URL_PORT } = process.env;
 
-wsClientListen(WS_URL_PORT); // запуск приложения
+//wsClientListen(WS_URL_PORT); // запуск приложения
 //e. если запускать файл сам по себе
 
 //s. если в связке
@@ -38,16 +38,16 @@ function wsClientListen(ws_port) {
 
 let status_ws = null;
 function connectToWebSocket(ws_port) {
-  let ws = new WebSocket(ws_port);
+  let ws = new ReconnectingWebSocket(ws_port);
 
-  ws.onerror = function (error) {
+ /* ws.onerror = function (error) {
     if (status_ws !== false) {
       status_ws = false;
       // console.log("ws.onerror", new Date().toISOString());
       consoleLogToFile("ws onerror " + new Date().toISOString());
     }
   };
-
+ */
   ws.onopen = function (e) {
     if (status_ws !== true) {
       status_ws = true;
@@ -164,3 +164,94 @@ async function dataWorking(obj) {
     console.log(err);
   }
 }
+
+// Клиент с реконнектом.
+class ReconnectingWebSocket {
+  constructor(url, protocols = []) {
+    this.url = url;
+    this.protocols = protocols;
+
+    this.reconnectDelay = 1000; // ms
+    this.maxReconnectDelay = 30000;
+    this.messageQueue = [];
+
+    this.listeners = {
+      open: [],
+      close: [],
+      error: [],
+      message: [],
+    };
+
+    this._connect();
+  }
+
+  _connect() {
+    this.ws = new WebSocket(this.url, this.protocols);
+
+    this.ws.addEventListener('open', (e) => {
+      this._flushQueue();
+      this._emit('open', e);
+    });
+
+    this.ws.addEventListener('message', (e) => {
+      this._emit('message', e);
+    });
+
+    this.ws.addEventListener('close', (e) => {
+      this._emit('close', e);
+      this._reconnect();
+    });
+
+    this.ws.addEventListener('error', (e) => {
+      this._emit('error', e);
+      this.ws.close();
+    });
+  }
+
+  _reconnect() {
+    setTimeout(() => {
+      this.reconnectDelay = Math.min(this.reconnectDelay * 2, this.maxReconnectDelay);
+      this._connect();
+    }, this.reconnectDelay);
+  }
+
+  _flushQueue() {
+    while (this.messageQueue.length > 0) {
+      this.send(this.messageQueue.shift());
+    }
+    this.reconnectDelay = 1000; // reset delay after successful connect
+  }
+
+  send(data) {
+    if (this.ws.readyState === WebSocket.OPEN) {
+      this.ws.send(data);
+    } else {
+      this.messageQueue.push(data);
+    }
+  }
+
+  close(code, reason) {
+    this.ws.close(code, reason);
+    this.messageQueue = []; // optional: clear queued messages
+  }
+
+  on(event, callback) {
+    if (this.listeners[event]) {
+      this.listeners[event].push(callback);
+    }
+  }
+
+  off(event, callback) {
+    if (this.listeners[event]) {
+      this.listeners[event] = this.listeners[event].filter(cb => cb !== callback);
+    }
+  }
+
+  _emit(event, data) {
+    if (this.listeners[event]) {
+      this.listeners[event].forEach(cb => cb(data));
+    }
+  }
+}
+
+const connection = connectToWebSocket(WS_URL_PORT);
