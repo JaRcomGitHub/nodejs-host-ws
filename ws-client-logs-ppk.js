@@ -22,20 +22,40 @@ function connectToWebSocket(ws_port) {
   
   ws.on('message', wsMessage);
 
+  ws.on('close', wsClose);
+
+  ws.on('error', wsError);
+
+  setInterval(() => {
+    //console.log(devices);
+    dataWorking(devices);
+    //console.log("dataWorking " + new Date().toISOString());
+  }, 10000); // every 10 sec check connect ws and try reconnect to ws
+
   return ws;
 }
 
 function wsOpen(){
-  //console.log("ws.onopen", new Date().toISOString());
-  consoleLogToFile("ws onopen " + new Date().toISOString());
+  //console.log("wsOpen", new Date().toISOString());
+  consoleLogToFile("ws open " + new Date().toISOString());
 }
 
 function wsMessage(e){
-    dataAddToLogFile(e.data);
-    //console.log("ws: " + e.data);
-    const values = strParseJson(e.data);
-    //console.log(values);
-    addDataToDevice(values);
+  dataAddToLogFile(e.data);
+  //console.log("ws: " + e.data);
+  const values = strParseJson(e.data);
+  // console.log(values);
+  addDataToDevice(values);
+}
+
+function wsClose(){
+  //console.log("wsClose", new Date().toISOString());
+  consoleLogToFile("ws close " + new Date().toISOString());
+}
+
+function wsError(){
+  //console.log("wsError", new Date().toISOString());
+  consoleLogToFile("ws error " + new Date().toISOString());
 }
 
 async function dataAddToLogFile(content) {
